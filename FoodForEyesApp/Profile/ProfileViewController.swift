@@ -4,13 +4,13 @@ final class ProfileViewController: UIViewController {
     
     let userAvatar = UIImageView(image: UIImage(named: "Photo") ?? UIImage(systemName: "person.crop.circle.fill"))
     
-    let logoutButton = UIButton()
+    private let logoutButton = UIButton()
     
-    let userNameLabel = UILabel()
+    private let userNameLabel = UILabel()
     
-    let loginNameLabel = UILabel()
+    private let loginNameLabel = UILabel()
     
-    let descriptionLabel = UILabel()
+    private let descriptionLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()

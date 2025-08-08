@@ -6,7 +6,6 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -187,7 +186,7 @@
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="fKG-rx-fvO"/>
-                        <color key="backgroundColor" systemColor="labelColor"/>
+                        <color key="backgroundColor" name="YP Black (iOS)"/>
                         <constraints>
                             <constraint firstItem="6MX-yw-Adl" firstAttribute="leading" secondItem="fKG-rx-fvO" secondAttribute="leading" id="4U9-d0-gRf"/>
                             <constraint firstItem="6MX-yw-Adl" firstAttribute="top" secondItem="zvT-u1-BMU" secondAttribute="top" id="LVS-5S-rbO"/>
@@ -223,8 +222,5 @@
         <namedColor name="YP White (iOS)">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="labelColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>
