@@ -36,8 +36,8 @@ final class SingleImageViewController: UIViewController, UIScrollViewDelegate {
         let share = UIActivityViewController(
             activityItems: [image],
             applicationActivities: nil
-            )
-            present(share, animated: true, completion: nil)
+        )
+        present(share, animated: true, completion: nil)
     }
     
     // MARK: - Delegates
@@ -61,14 +61,15 @@ final class SingleImageViewController: UIViewController, UIScrollViewDelegate {
     }
     
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
-        //let minZoomScale = scrollView.minimumZoomScale
-        //let maxZoomScale = scrollView.maximumZoomScale
+
         view.layoutIfNeeded()
         let visibleRectSize = scrollView.bounds.size
         let imageSize = image.size
+        
+        guard imageSize.width > 0 && imageSize.height > 0 else {return}
+        
         let hScale = visibleRectSize.width / imageSize.width
         let vScale = visibleRectSize.height / imageSize.height
-        //let scale = min(maxZoomScale, max(minZoomScale, min(hScale, vScale)))
         let scale = max(scrollView.minimumZoomScale, min(scrollView.maximumZoomScale, max(hScale, vScale)))
         scrollView.setZoomScale(scale, animated: false)
         scrollView.layoutIfNeeded()
