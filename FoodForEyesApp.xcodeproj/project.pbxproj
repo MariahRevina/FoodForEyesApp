@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2750DF5C2E54ED5800FDE8E5 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27E682D72E49EC1500C935B6 /* WebKit.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		276F92B42E202FCC004EE155 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		276F929A2E202FCA004EE155 /* FoodForEyesApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoodForEyesApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		276F92B32E202FCC004EE155 /* FoodForEyesAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FoodForEyesAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		276F92BD2E202FCC004EE155 /* FoodForEyesAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FoodForEyesAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		27E682D72E49EC1500C935B6 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -65,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2750DF5C2E54ED5800FDE8E5 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +97,7 @@
 				276F929C2E202FCA004EE155 /* FoodForEyesApp */,
 				276F92B62E202FCC004EE155 /* FoodForEyesAppTests */,
 				276F92C02E202FCC004EE155 /* FoodForEyesAppUITests */,
+				27E682D62E49EC1500C935B6 /* Frameworks */,
 				276F929B2E202FCA004EE155 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -103,6 +110,14 @@
 				276F92BD2E202FCC004EE155 /* FoodForEyesAppUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		27E682D62E49EC1500C935B6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				27E682D72E49EC1500C935B6 /* WebKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -287,6 +302,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = FoodForEyesApp/FoodForEyesApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4JM57TLK52;
@@ -319,6 +335,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = FoodForEyesApp/FoodForEyesApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4JM57TLK52;

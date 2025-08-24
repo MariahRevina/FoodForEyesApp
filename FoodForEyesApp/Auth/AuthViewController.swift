@@ -1,0 +1,78 @@
+import UIKit
+
+protocol AuthViewControllerDelegate: AnyObject {
+    func didAuthenticate(_ vc: AuthViewController, didAuthenticateWithToken token: String)
+}
+
+final class AuthViewController: UIViewController, WebViewViewControllerDelegate {
+    
+    private let segueMeaning = "ShowWebView"
+    
+    private let oauth2Service = OAuth2Service.shared
+    private let storage = OAuth2TokenStorage.shared
+    
+    weak var delegate: AuthViewControllerDelegate?
+    override func viewDidLoad() {
+        print("AuthViewController загружен")
+        super.viewDidLoad()
+        configureBackButton()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print("prepare called for segue: \(segue.identifier ?? "nil")")
+        if segue.identifier == segueMeaning {
+            print("Идентификатор segue: \(segue.identifier ?? "nil")")
+            print("Ожидаемый идентификатор: \(segueMeaning)")
+            guard let webViewController = segue.destination as? WebViewViewController
+            else {
+                assertionFailure("Failed to prepare for \(segueMeaning)")
+                return
+            }
+            print("Тип destination: \(type(of: segue.destination))")
+            print("Is WebViewViewController: \(segue.destination is WebViewViewController)")
+            webViewController.delegate = self
+        } else {
+            super.prepare(for: segue, sender: sender)
+        }
+    }
+    
+    
+    func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
+        
+        print("1. Получен код: \(code)")
+        fetchOAuthToken(code) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let token):
+                print("2. Успешно получили токен: \(token)")
+                self.storage.token = token
+                print("3. Сохранили в storage: \(self.storage.token ?? "nil")")
+                vc.dismiss(animated: true)
+                print("4. WebView закрыт, вызываем делегат")
+                self.delegate?.didAuthenticate(self, didAuthenticateWithToken: token)
+                
+                
+            case .failure(let error):
+                print("4. Ошибка получения токена: \(error)")
+            }
+        }
+    }
+    
+    func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
+        vc.dismiss(animated: true)
+    }
+    private func configureBackButton() {
+        navigationController?.navigationBar.backIndicatorImage = UIImage(named: "nav_back_button")
+        navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "nav_back_button")
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationItem.backBarButtonItem?.tintColor = UIColor(named: "YP Black (iOS)")
+    }
+}
+extension AuthViewController {
+    private func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
+        oauth2Service.fetchOAuthToken(code) { result in
+            completion(result)
+        }
+    }
+}
