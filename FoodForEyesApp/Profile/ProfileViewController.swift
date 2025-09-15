@@ -1,25 +1,92 @@
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
-    let userAvatar = UIImageView(image: UIImage(named: "Photo") ?? UIImage(systemName: "person.crop.circle.fill"))
+    private var userAvatar = UIImageView()
     
     private let logoutButton = UIButton()
     
-    private let userNameLabel = UILabel()
+    private var userNameLabel = UILabel()
     
-    private let loginNameLabel = UILabel()
+    private var loginNameLabel = UILabel()
     
-    private let descriptionLabel = UILabel()
+    private var descriptionLabel = UILabel()
+    
+    private let profileService = ProfileService.shared
+    
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor(named: "YP Black (iOS)")
         setupUserAvatar()
+        
         setupLogoutButton()
         setupUserNameLabel()
         setupLoginNameLabel()
         setupDescriptionLabel()
         setupConstraints()
+        if let profile = profileService.profile {
+            updateProfileDetails(profile: profile)
+        }
+        profileImageServiceObserver = NotificationCenter.default.addObserver(forName: ProfileImageService.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
+            guard let self = self else { return }
+            self.updateAvatar()
+        }
+        updateAvatar()
+    }
+    
+    private func updateAvatar() {
+        print("updateAvatar called")
+        guard let profileImageURL = ProfileImageService.shared.avatarURL,
+              let url = URL(string: profileImageURL)
+        else {
+            print("No avatar URL available")
+            return }
+        
+        print("Loading avatar from imageUrl: \(url)")
+        
+        let placeholder = UIImage(systemName: "person.circle.fill")?
+            .withTintColor(.lightGray, renderingMode: .alwaysOriginal)
+            .withConfiguration(UIImage.SymbolConfiguration(pointSize: 70, weight: .regular, scale: .large))
+        
+        let processor = RoundCornerImageProcessor(cornerRadius: 35)
+        userAvatar.kf.indicatorType = .activity
+        userAvatar.kf.setImage(
+            with: url,
+            placeholder: placeholder,
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .cacheOriginalImage,
+                .forceRefresh
+            ]
+        ) { result in
+            switch result {
+            case .success(let value):
+                print(value.image)
+                print(value.cacheType)
+                print(value.source)
+            case .failure(let error):
+                print(error)
+            }
+            
+        }
+    }
+    
+    
+    private func updateProfileDetails(profile: Profile) {
+        
+        userNameLabel.text = profile.name.isEmpty
+        ? "Имя не указано"
+        : profile.name
+        loginNameLabel.text = profile.loginName.isEmpty
+        ? "Логин не указан"
+        : profile.loginName
+        descriptionLabel.text = (profile.bio?.isEmpty ?? true)
+        ? "Профиль не заполнен"
+        : profile.bio
         
     }
     
@@ -63,6 +130,8 @@ final class ProfileViewController: UIViewController {
     }
     
     @objc private func didTapLogoutButton() {
+        OAuth2TokenStorage.shared.token = nil
+        ProfileService.shared.clearProfile()
     }
     
     private func setupConstraints() {
