@@ -1,8 +1,23 @@
 import Foundation
 
+enum AuthServiceError: Error {
+    case invalidRequest
+    case requestInProgress
+    case alreadyHaveToken
+}
+
 final class OAuth2Service {
     
     static let shared = OAuth2Service()
+    private let urlSession = URLSession.shared
+    private var task: URLSessionTask?
+    private var lastcode: String?
+    private var dataStorage = OAuth2TokenStorage.shared
+    
+    private(set) var authToken: String? {
+        get {return dataStorage.token}
+        set {dataStorage.token = newValue}
+    }
     
     private init() {
         
@@ -10,9 +25,7 @@ final class OAuth2Service {
     
     func authTokenRequest(code: String) -> URLRequest? {
         
-        let baseURL = "https://unsplash.com/oauth/token"
-        
-        guard var urlComponents = URLComponents(string: baseURL) else {
+        guard var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token") else {
             print("Невозможно создать объект URLComponents из строки")
             return nil
         }
@@ -34,8 +47,23 @@ final class OAuth2Service {
         request.httpMethod = "POST"
         return request
     }
+    
     func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
-        
+        assert(Thread.isMainThread)
+        if task != nil {
+            if lastcode != code {
+                task?.cancel()
+            } else {
+                completion(.failure(AuthServiceError.requestInProgress))
+                return
+            }
+        } else {
+            if lastcode == code {
+                completion(.failure(AuthServiceError.alreadyHaveToken))
+                return
+            }
+        }
+        lastcode = code
         guard let request = authTokenRequest(code: code) else {
             print("Ошибка: Невозможно создать запрос - \(NetworkError.invalidRequest)")
             DispatchQueue.main.async{
@@ -44,25 +72,32 @@ final class OAuth2Service {
             return
         }
         
-        let task = URLSession.shared.data(for: request) { result in
-            switch result {
-            case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    let response = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    OAuth2TokenStorage.shared.token = response.accessToken
-                    print("Токен получен и сохранен")
-                    completion(.success(response.accessToken))
+        UIBlockingProgressHUD.show()
+        
+        let task = urlSession.objectTask(for: request) { [weak self]  (result: Result<OAuthTokenResponseBody, Error>) in
+            DispatchQueue.main.async {
+                UIBlockingProgressHUD.dismiss()
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let body):
+                    let authtoken = body.accessToken
+                    self.authToken = authtoken
+                    completion(.success(authtoken))
                     
-                } catch let decodingError {
-                    print("Ошибка декодирования токена: \(decodingError)")
-                    completion(.failure(NetworkError.decodingError(decodingError)))
+                    self.task = nil
+                    self.lastcode = nil
+                    
+                case .failure(let error):
+                    print("[fetchOAuthToken]: Ошибка запроса: \(error.localizedDescription)")
+                    completion(.failure(error))
+                    
+                    self.task = nil
+                    self.lastcode = nil
                 }
-            case .failure(let error):
-                print("Сетевая ошибка при получении токена: \(error)")
-                completion(.failure(error))
             }
         }
+        self.task = task
         task.resume()
     }
 }
