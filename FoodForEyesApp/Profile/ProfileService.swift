@@ -5,13 +5,6 @@ struct ProfileResult: Codable{
     let firstName: String?
     let lastName: String?
     let bio: String?
-    
-//    enum CodingKeys: String, CodingKey {
-//        case userName = "username"
-//        case firstName = "first_name"
-//        case lastName = "last_name"
-//        case bio
-//    }
 }
 
 struct Profile {
@@ -46,7 +39,7 @@ final class ProfileService {
         else {return nil}
         
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
+        request.httpMethod = HTTPMethod.get.rawValue
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
