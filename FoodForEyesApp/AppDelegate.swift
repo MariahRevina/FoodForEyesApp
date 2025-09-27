@@ -1,6 +1,7 @@
 import UIKit
-import CoreData
 import ProgressHUD
+import CoreData
+
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {

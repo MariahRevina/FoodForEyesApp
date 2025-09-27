@@ -3,6 +3,8 @@ import Foundation
 
 final class ImagesListService {
     
+    static let shared = ImagesListService()
+    
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     
     private(set) var photos: [Photo] = []
@@ -13,6 +15,8 @@ final class ImagesListService {
     private var likeTask: URLSessionTask?
     
     private let perPage = 10
+    
+    private init() {}
     
     // MARK: - Fetch Photos
     
@@ -157,4 +161,7 @@ final class ImagesListService {
         return request
     }
     
+    func cleanImages() {
+            photos = []
+        }
 }

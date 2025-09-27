@@ -15,7 +15,7 @@ final class ImagesListViewController: UIViewController {
         return formatter
     }()
     
-    private var imagesListService = ImagesListService()
+    private let imagesListService = ImagesListService.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -157,8 +157,8 @@ extension ImagesListViewController: ImagesListCellDelegate {
     
     private func showLikeErrorAlert(error: Error) {
         let alert = UIAlertController(
-            title: "Ошибка",
-            message: "Не удалось поставить лайк: \(error.localizedDescription)",
+            title: "Что-то пошшло не так",
+            message: "Не удалось войти в систему",
             preferredStyle: .alert
         )
         alert.addAction(UIAlertAction(title: "OK", style: .default))
