@@ -1,12 +1,6 @@
-//
-//  AppDelegate.swift
-//  FoodForEyesApp
-//
-//  Created by Мария уже Ревина on 10.07.2025.
-//
-
 import UIKit
 import CoreData
+import ProgressHUD
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,6 +8,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        ProgressHUD.animationType = .activityIndicator
+            ProgressHUD.colorHUD = .black
+            ProgressHUD.colorAnimation = .white
+        ProgressHUD.colorBackground = .ypBlack
        
         return true
     }

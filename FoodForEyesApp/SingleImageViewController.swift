@@ -1,4 +1,5 @@
 import UIKit
+import Kingfisher
 
 final class SingleImageViewController: UIViewController, UIScrollViewDelegate {
     
@@ -9,7 +10,7 @@ final class SingleImageViewController: UIViewController, UIScrollViewDelegate {
     
     // MARK: - Public Properties
     
-    var image: UIImage? {
+    var photo: Photo? {
         didSet {
             guard isViewLoaded else { return }
             updateImage()
@@ -22,6 +23,10 @@ final class SingleImageViewController: UIViewController, UIScrollViewDelegate {
         super.viewDidLoad()
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
+        
+        if let photo = photo {
+            imageView.frame.size = photo.size
+        }
         updateImage()
     }
     
@@ -32,7 +37,7 @@ final class SingleImageViewController: UIViewController, UIScrollViewDelegate {
     }
     
     @IBAction private func didTapShareButton(_ sender: UIButton) {
-        guard let image else { return }
+        guard let image = imageView.image else { return }
         let share = UIActivityViewController(
             activityItems: [image],
             applicationActivities: nil
@@ -80,10 +85,42 @@ final class SingleImageViewController: UIViewController, UIScrollViewDelegate {
     }
     
     private func updateImage() {
-        guard let image else { return }
-        imageView.image = image
-        imageView.frame.size = image.size
-        rescaleAndCenterImageInScrollView(image: image)
+        guard let photo = photo, let url = URL(string: photo.largeImageURL) else { return }
+        imageView.kf.indicatorType = .activity
+        imageView.frame.size = photo.size
+        imageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "singleImageStub"),
+            options: [.transition(.fade(0.2))]
+        ) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let value):
+                self.imageView.image = value.image
+                self.imageView.frame.size = value.image.size
+                self.rescaleAndCenterImageInScrollView(image: value.image)
+            case .failure(let error):
+                print("Downloading image failed with error: \(error)")
+                self.showAlert ()
+            }
+        }
     }
     
+    private func showAlert () {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так",
+            message: "Попробовать ещё раз?",
+            preferredStyle: .alert)
+        
+        let retryAction = UIAlertAction(title: "Повторить?", style: .default) {[weak self] _ in
+            self?.updateImage()
+        }
+        
+        let cancelAction = UIAlertAction(title: "Не надо", style: .cancel)
+        
+        alert.addAction(retryAction)
+        alert.addAction(cancelAction)
+        
+        present(alert, animated: true)
+    }
 }

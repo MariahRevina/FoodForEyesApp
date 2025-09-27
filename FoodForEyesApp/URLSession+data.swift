@@ -6,7 +6,9 @@ enum NetworkError: Error {
     case urlSessionError
     case invalidRequest
     case decodingError(Error)
+    case invalidResponse
 }
+
 
 extension URLSession {
     func data(

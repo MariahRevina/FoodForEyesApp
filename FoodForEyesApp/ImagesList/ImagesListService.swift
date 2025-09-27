@@ -1,48 +1,5 @@
 import Foundation
 
-struct Photo {
-    let id: String
-    let size: CGSize
-    let createdAt: Date?
-    let welcomeDescription: String?
-    let thumbImageURL: String
-    let largeImageURL: String
-    let isLiked: Bool
-}
-
-extension Photo {
-    
-    init(from result: PhotoResult) {
-        self.id = result.id
-        self.size = CGSize(width: result.width, height: result.height)
-        self.createdAt = ISO8601DateFormatter().date(from: result.createdAt)
-        self.welcomeDescription = result.description
-        self.thumbImageURL = result.urls.thumb
-        self.largeImageURL = result.urls.full
-        self.isLiked = result.likedByUser
-        
-    }
-    
-}
-
-struct PhotoResult: Decodable {
-    let id: String
-    let createdAt: String
-    let updatedAt: String
-    let width: Int
-    let height: Int
-    let likedByUser: Bool
-    let description: String?
-    let urls: UrlsResult
-}
-
-struct UrlsResult: Decodable {
-    let raw: String
-    let full: String
-    let regular: String
-    let small: String
-    let thumb: String
-}
 
 final class ImagesListService {
     
@@ -53,8 +10,11 @@ final class ImagesListService {
     private var lastLoadedPage: Int?
     
     private var currentTask: URLSessionTask?
+    private var likeTask: URLSessionTask?
     
     private let perPage = 10
+    
+    // MARK: - Fetch Photos
     
     func fetchPhotosNextPage() {
         
@@ -71,7 +31,7 @@ final class ImagesListService {
         }
         
         currentTask = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<[PhotoResult],Error>) in
-            guard let self else { return }
+            guard let self = self else { return }
             defer {
                 self.currentTask = nil
             }
@@ -96,6 +56,81 @@ final class ImagesListService {
             }
         }
         currentTask?.resume()
+    }
+    
+    // MARK: - Change Like
+    
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void,Error>) -> Void) {
+        likeTask?.cancel()
+        
+        guard let request = createLikeRequest(photoId: photoId, isLike: isLike)
+        else {
+            completion(.failure(NetworkError.invalidRequest))
+            return
+        }
+        
+        likeTask = URLSession.shared.dataTask(with: request) {[weak self] data, response, error in
+            
+            guard let self = self else { return }
+            
+            if let error = error {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+                return
+            }
+            guard let httpResponse = response as? HTTPURLResponse else {
+                DispatchQueue.main.async {
+                    completion(.failure(NetworkError.invalidResponse))
+                }
+                return
+            }
+            
+            if(200...299).contains(httpResponse.statusCode) {
+                DispatchQueue.main.async {
+                    if let index = self.photos.firstIndex(where: {$0.id == photoId}) {
+                        var updatedPhoto = self.photos[index]
+                        updatedPhoto.isLiked = isLike
+                        self.photos[index] = updatedPhoto
+                        
+                        let updatedIndexPath = IndexPath(row: index, section: 0)
+                        
+                        NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: self,  userInfo: ["updatedIndexPath": updatedIndexPath])
+                        completion(.success(()))
+                    } else {
+                        completion(.failure(NSError(
+                            domain: "ImagesListService",
+                            code: -1,
+                            userInfo: [NSLocalizedDescriptionKey: "Фото с id \(photoId) не найдено"])))
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    completion(.failure(NSError(domain: "ImagesListService", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: "Ошибка сервера: \(httpResponse.statusCode)"])))
+                }
+            }
+        }
+        likeTask?.resume()
+    }
+    
+    // MARK: - Private Methods
+    
+    private func createLikeRequest(photoId: String, isLike: Bool) -> URLRequest? {
+        let urlString = "https://api.unsplash.com/photos/\(photoId)/like"
+        guard let url = URL(string: urlString) else {
+            print("Неверный URL для лайка")
+            return nil
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = isLike ? HTTPMethod.post.rawValue : HTTPMethod.delete.rawValue
+        
+        if let token = OAuth2TokenStorage.shared.token {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        } else {
+            print("Токена нет")
+            return nil
+        }
+        return request
     }
     
     private func createRequest(for page: Int) -> URLRequest? {

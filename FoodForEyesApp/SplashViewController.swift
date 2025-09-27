@@ -1,4 +1,5 @@
 import UIKit
+import ProgressHUD
 
 final class SplashViewController: UIViewController {
     
@@ -19,10 +20,12 @@ final class SplashViewController: UIViewController {
         super.viewDidAppear(animated)
         print("storage.token: \(storage.token ?? "nil")")
         
+        ProgressHUD.animate()
         if let token = storage.token {
             
             fetchProfile(token: token)
         } else {
+            ProgressHUD.dismiss()
             presentAuthViewController()
         }
     }
