@@ -26,12 +26,15 @@ extension URLSession {
                 if 200 ..< 300 ~= statusCode {
                     fulfillCompletionOnTheMainThread(.success(data))
                 } else {
+                    print("[URLSession] [data] HTTP ошибка: \(statusCode) [url: \(request.url?.absoluteString ?? "unknown")]")
                     print(String(data: data, encoding: .utf8) ?? "Sorry, unsuccessfull status-code")
                     fulfillCompletionOnTheMainThread(.failure(NetworkError.httpStatusCode(statusCode)))
                 }
             } else if let error = error {
+                print("[URLSession] [data] Ошибка запроса: \(error) [url: \(request.url?.absoluteString ?? "unknown")]")
                 fulfillCompletionOnTheMainThread(.failure(NetworkError.urlRequestError(error)))
             } else {
+                print("[URLSession] [data] Неизвестная ошибка сессии [url: \(request.url?.absoluteString ?? "unknown")]")
                 fulfillCompletionOnTheMainThread(.failure(NetworkError.urlSessionError))
             }
         })
@@ -57,15 +60,11 @@ extension URLSession {
                     let decodedObject = try decoder.decode(T.self, from: data)
                     completion(.success(decodedObject))
                 } catch {
-                    if let decodingError = error as? DecodingError {
-                        print("Ошибка декодирования: \(decodingError), данные: \(String(data: data, encoding: .utf8) ?? "")")
-                    } else {
-                        print("Ошибка декодирования: \(error.localizedDescription), данные: \(String(data: data, encoding: .utf8) ?? "")")
-                    }
+                    print("[URLSession] [objectTask] Ошибка декодирования: \(error) [type: \(T.self), data: \(String(data: data, encoding: .utf8) ?? "invalid")]")
                     completion(.failure(error))
                 }
             case .failure(let error):
-                print("Ошибка загрузки данных: \(error.localizedDescription)")
+                print("[URLSession] [objectTask] Ошибка данных: \(error) [request: \(request.url?.absoluteString ?? "unknown")]")
                 completion(.failure(error))
             }
         }

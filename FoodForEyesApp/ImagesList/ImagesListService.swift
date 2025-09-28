@@ -56,7 +56,7 @@ final class ImagesListService {
                     print("Успешно загружено \(newPhotos.count) фото. Всего фото: \(self.photos.count)")
                 }
             case .failure(let error):
-                print("Ошибка загрузки страницы \(nextPage): \(error.localizedDescription)")
+                print("[ImagesListService] [fetchPhotosNextPage] Ошибка: \(error) [page: \(nextPage), per_page: \(perPage)]")
             }
         }
         currentTask?.resume()
@@ -69,6 +69,8 @@ final class ImagesListService {
         
         guard let request = createLikeRequest(photoId: photoId, isLike: isLike)
         else {
+            let error = NetworkError.invalidRequest
+            print("[ImagesListService] [changeLike] Ошибка запроса: \(error) [photoId: \(photoId), isLike: \(isLike)]")
             completion(.failure(NetworkError.invalidRequest))
             return
         }
@@ -162,6 +164,6 @@ final class ImagesListService {
     }
     
     func cleanImages() {
-            photos = []
-        }
+        photos = []
+    }
 }

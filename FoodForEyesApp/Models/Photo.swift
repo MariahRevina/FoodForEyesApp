@@ -13,10 +13,15 @@ struct Photo {
 
 extension Photo {
     
+    private static let apiDateFormatter: ISO8601DateFormatter = {
+            let formatter = ISO8601DateFormatter()
+            return formatter
+        }()
+    
     init(from result: PhotoResult) {
         self.id = result.id
         self.size = CGSize(width: result.width, height: result.height)
-        self.createdAt = ISO8601DateFormatter().date(from: result.createdAt)
+        self.createdAt = Photo.apiDateFormatter.date(from: result.createdAt)
         self.welcomeDescription = result.description
         self.thumbImageURL = result.urls.thumb
         self.largeImageURL = result.urls.full
