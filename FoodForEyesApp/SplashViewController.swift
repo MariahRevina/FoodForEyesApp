@@ -1,4 +1,5 @@
 import UIKit
+import ProgressHUD
 
 final class SplashViewController: UIViewController {
     
@@ -19,10 +20,12 @@ final class SplashViewController: UIViewController {
         super.viewDidAppear(animated)
         print("storage.token: \(storage.token ?? "nil")")
         
+        ProgressHUD.animate()
         if let token = storage.token {
             
             fetchProfile(token: token)
         } else {
+            ProgressHUD.dismiss()
             presentAuthViewController()
         }
     }
@@ -46,11 +49,11 @@ final class SplashViewController: UIViewController {
         view.addSubview(splashScreenLogo)
         
         NSLayoutConstraint.activate([
-                    splashScreenLogo.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                    splashScreenLogo.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-                    splashScreenLogo.widthAnchor.constraint(equalToConstant: 74),
-                    splashScreenLogo.heightAnchor.constraint(equalToConstant: 76.64)
-                ])
+            splashScreenLogo.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            splashScreenLogo.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            splashScreenLogo.widthAnchor.constraint(equalToConstant: 74),
+            splashScreenLogo.heightAnchor.constraint(equalToConstant: 76.64)
+        ])
     }
     
     private func presentAuthViewController() {
@@ -65,7 +68,7 @@ final class SplashViewController: UIViewController {
         authViewController.delegate = self
         authViewController.modalPresentationStyle = .fullScreen
         present(authViewController, animated: true)
-                
+        
     }
     
     private func switchToTabBarController() {

@@ -1,5 +1,4 @@
 import UIKit
-import ProgressHUD
 
 protocol AuthViewControllerDelegate: AnyObject {
     func didAuthenticate(_ vc: AuthViewController, didAuthenticateWithToken token: String)
@@ -43,6 +42,7 @@ final class AuthViewController: UIViewController, WebViewViewControllerDelegate 
         print("1. Получен код: \(code)")
         UIBlockingProgressHUD.show()
             oauth2Service.fetchOAuthToken(code) { [weak self] result in
+                UIBlockingProgressHUD.dismiss()
                 guard let self = self else { return }
                 
                 switch result {
@@ -50,7 +50,6 @@ final class AuthViewController: UIViewController, WebViewViewControllerDelegate 
                     print("2. Успешно получили токен: \(token)")
                     self.storage.token = token
                     print("3. Сохранили в storage: \(self.storage.token ?? "nil")")
-                    UIBlockingProgressHUD.dismiss()
                     vc.dismiss(animated: true)
                     print("4. WebView закрыт, вызываем делегат")
                     self.delegate?.didAuthenticate(self, didAuthenticateWithToken: token)
@@ -58,7 +57,6 @@ final class AuthViewController: UIViewController, WebViewViewControllerDelegate 
                     
                 case .failure(let error):
                     print("4. Ошибка получения токена: \(error)")
-                    UIBlockingProgressHUD.dismiss()
                     showAlert(title: "Что-то пошло не так", message: "Не удалось войти в систему")
                 }
             }
@@ -68,9 +66,8 @@ final class AuthViewController: UIViewController, WebViewViewControllerDelegate 
         vc.dismiss(animated: true)
     }
     private func configureBackButton() {
-        // navigationController?.navigationBar.backIndicatorImage = UIImage(resource: .navBackButton)
-        navigationController?.navigationBar.backIndicatorImage = UIImage(named: "nav_back_button")
-        navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "nav_back_button")
+        navigationController?.navigationBar.backIndicatorImage = UIImage(resource: .navBackButton)
+        navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(resource: .navBackButton)
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationItem.backBarButtonItem?.tintColor = UIColor(named: "YP Black (iOS)")
     }

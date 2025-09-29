@@ -1,4 +1,9 @@
 import UIKit
+import Kingfisher
+
+protocol ImagesListCellDelegate: AnyObject {
+    func imageListCellDidTapLike(_ cell: ImagesListCell)
+}
 
 final class ImagesListCell: UITableViewCell {
     
@@ -6,12 +11,58 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet  private var cellImage: UIImageView!
     @IBOutlet  private var likeButton: UIButton!
 
-    static var reuseIdentifier = "ImagesListCell"
+    static let reuseIdentifier = "ImagesListCell"
     
-    func configure(with image: UIImage?, date: String, isLiked: Bool) {
-        cellImage.image = image
+    weak var delegate: ImagesListCellDelegate?
+    
+    @IBAction private func likeButtonClicked(_ sender: UIButton) {
+            delegate?.imageListCellDidTapLike(self)
+        }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        cellImage.kf.indicatorType = .activity
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cellImage.kf.cancelDownloadTask()
+        cellImage.image = nil
+    }
+    
+    func configure(with photo: Photo, date: String) {
         dateLabel.text = date
-        let imageInLikeButton = isLiked ? UIImage(named: "Active") : UIImage(named: "Passive")
-        likeButton.setImage(imageInLikeButton, for: .normal)
+        setIsLiked(photo.isLiked)
+        
+        if let url = URL(string: photo.thumbImageURL) {
+            
+            let placeHolder = UIImage(named: "loadingImageStub")
+            
+            cellImage.kf.setImage(
+                with: url,
+                placeholder: placeHolder,
+                options:[
+                    .transition(.fade(0.2))
+                ]
+            ) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success:
+                    NotificationCenter.default.post(
+                        name: NSNotification.Name("ImageLoaded"),
+                        object: self,
+                        userInfo: ["IndexPath": IndexPath(row: self.tag, section: 0)])
+                case .failure(let error):
+                    print("Error loading image: \(error)")
+                }
+                
+            }
+            
+        }
+        
+    }
+    private func setIsLiked(_ isLiked: Bool) {
+        let imageName = isLiked ? "Active" : "Passive"
+        likeButton.setImage(UIImage(named: imageName), for: .normal)
     }
 }
