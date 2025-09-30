@@ -24,14 +24,16 @@ final class AuthViewController: UIViewController, WebViewViewControllerDelegate 
         if segue.identifier == segueMeaning {
             print("Идентификатор segue: \(segue.identifier ?? "nil")")
             print("Ожидаемый идентификатор: \(segueMeaning)")
-            guard let webViewController = segue.destination as? WebViewViewController
+            guard let webViewViewController = segue.destination as? WebViewViewController
             else {
                 assertionFailure("Failed to prepare for \(segueMeaning)")
                 return
             }
-            print("Тип destination: \(type(of: segue.destination))")
-            print("Is WebViewViewController: \(segue.destination is WebViewViewController)")
-            webViewController.delegate = self
+            let authHelper = AuthHelper()
+            let webViewPresenter = WebViewPresenter(authHelper: authHelper)
+                    webViewViewController.presenter = webViewPresenter
+                    webViewPresenter.view = webViewViewController
+                    webViewViewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
         }

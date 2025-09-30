@@ -1,11 +1,16 @@
 import UIKit
 import WebKit
 
-enum WebViewConstants {
-    static let unsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
+public protocol WebViewViewControllerProtocol: AnyObject {
+    var presenter: WebViewPresenterProtocol? { get set }
+    func load(request: URLRequest)
+    func setProgressValue(_ newValue: Float)
+    func setProgressHidden(_ isHidden: Bool)
 }
 
-final class WebViewViewController: UIViewController {
+final class WebViewViewController: UIViewController & WebViewViewControllerProtocol{
+    
+    var presenter: WebViewPresenterProtocol?
     
     @IBOutlet private var progressView: UIProgressView!
     @IBOutlet private var webView: WKWebView!
@@ -15,43 +20,23 @@ final class WebViewViewController: UIViewController {
     private var estimatedProgressObservation: NSKeyValueObservation?
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
         webView.navigationDelegate = self
-        
-        loadAuthView()
-        
-        updateProgress()
+        presenter?.viewDidLoad()
         
         estimatedProgressObservation = webView.observe(
             \.estimatedProgress,
              options: [],
-             changeHandler: {[weak self]_, _ in
+             changeHandler: {[weak self] webView, _ in
                  guard let self = self else { return }
-                 self.updateProgress()
+                 self.presenter?.didUpdateProgressValue(webView.estimatedProgress)
              })
+        
     }
     
-    private func loadAuthView() {
-        
-        guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAuthorizeURLString) else {
-            print("Невозможно создать объект URLComponents из строки")
-            return
-        }
-        
-        urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: Constants.accessKey),
-            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: Constants.accessScope),
-        ]
-        
-        guard let url = urlComponents.url else {
-            print("Ошибка: Неверная структура URL-компонентов для формирования URL")
-            return
-        }
-        
-        let request = URLRequest(url: url)
+    func load(request: URLRequest) {
         webView.load(request)
     }
     
@@ -61,18 +46,20 @@ final class WebViewViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-    
-        updateProgress()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
     }
     
-    private func updateProgress() {
-        progressView.progress = Float(webView.estimatedProgress)
-        progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
+    func setProgressValue(_ newValue: Float) {
+        progressView.progress = newValue
     }
+    
+    func setProgressHidden(_ isHidden: Bool) {
+        progressView.isHidden = isHidden
+    }
+    
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         print("Ошибка загрузки: \(error.localizedDescription)")
     }
@@ -97,20 +84,9 @@ extension WebViewViewController: WKNavigationDelegate {
     }
     
     private func code(from navigationAction: WKNavigationAction) -> String? {
-        guard let url = navigationAction.request.url,
-              let urlComponents = URLComponents(string: url.absoluteString) else {
-            print("Не могу разобрать URL")
+            if let url = navigationAction.request.url {
+                return presenter?.code(from: url)
+            }
             return nil
         }
-        
-        print("🔍 Проверяем URL: \(url.absoluteString)")
-        
-        if let codeItem = urlComponents.queryItems?.first(where: { $0.name == "code" }) {
-            print("Найден код: \(codeItem.value ?? "nil")")
-            return codeItem.value
-        }
-        
-        print("Код не найден в query параметрах")
-        return nil
-    }
 }
