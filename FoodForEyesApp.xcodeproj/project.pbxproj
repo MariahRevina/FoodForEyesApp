@@ -28,12 +28,20 @@
 			remoteGlobalIDString = 276F92992E202FCA004EE155;
 			remoteInfo = FoodForEyesApp;
 		};
+		27C6998C2E8C30E40090D12D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 276F92922E202FCA004EE155 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 276F92992E202FCA004EE155;
+			remoteInfo = FoodForEyesApp;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		276F929A2E202FCA004EE155 /* FoodForEyesApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoodForEyesApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		276F92B32E202FCC004EE155 /* FoodForEyesAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FoodForEyesAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		276F92BD2E202FCC004EE155 /* FoodForEyesAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FoodForEyesAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		27C699882E8C30E40090D12D /* FoodForEyesAppTestss.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FoodForEyesAppTestss.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		27E682D72E49EC1500C935B6 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -56,14 +64,14 @@
 			path = FoodForEyesApp;
 			sourceTree = "<group>";
 		};
-		276F92B62E202FCC004EE155 /* FoodForEyesAppTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = FoodForEyesAppTests;
-			sourceTree = "<group>";
-		};
 		276F92C02E202FCC004EE155 /* FoodForEyesAppUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = FoodForEyesAppUITests;
+			sourceTree = "<group>";
+		};
+		27C699892E8C30E40090D12D /* FoodForEyesAppTestss */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FoodForEyesAppTestss;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -94,6 +102,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		27C699852E8C30E40090D12D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -101,8 +116,8 @@
 			isa = PBXGroup;
 			children = (
 				276F929C2E202FCA004EE155 /* FoodForEyesApp */,
-				276F92B62E202FCC004EE155 /* FoodForEyesAppTests */,
 				276F92C02E202FCC004EE155 /* FoodForEyesAppUITests */,
+				27C699892E8C30E40090D12D /* FoodForEyesAppTestss */,
 				27E682D62E49EC1500C935B6 /* Frameworks */,
 				276F929B2E202FCA004EE155 /* Products */,
 			);
@@ -114,6 +129,7 @@
 				276F929A2E202FCA004EE155 /* FoodForEyesApp.app */,
 				276F92B32E202FCC004EE155 /* FoodForEyesAppTests.xctest */,
 				276F92BD2E202FCC004EE155 /* FoodForEyesAppUITests.xctest */,
+				27C699882E8C30E40090D12D /* FoodForEyesAppTestss.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -167,9 +183,6 @@
 			dependencies = (
 				276F92B52E202FCC004EE155 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				276F92B62E202FCC004EE155 /* FoodForEyesAppTests */,
-			);
 			name = FoodForEyesAppTests;
 			packageProductDependencies = (
 			);
@@ -200,6 +213,29 @@
 			productReference = 276F92BD2E202FCC004EE155 /* FoodForEyesAppUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		27C699872E8C30E40090D12D /* FoodForEyesAppTestss */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 27C6998E2E8C30E40090D12D /* Build configuration list for PBXNativeTarget "FoodForEyesAppTestss" */;
+			buildPhases = (
+				27C699842E8C30E40090D12D /* Sources */,
+				27C699852E8C30E40090D12D /* Frameworks */,
+				27C699862E8C30E40090D12D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				27C6998D2E8C30E40090D12D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				27C699892E8C30E40090D12D /* FoodForEyesAppTestss */,
+			);
+			name = FoodForEyesAppTestss;
+			packageProductDependencies = (
+			);
+			productName = FoodForEyesAppTestss;
+			productReference = 27C699882E8C30E40090D12D /* FoodForEyesAppTestss.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -207,7 +243,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1640;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					276F92992E202FCA004EE155 = {
@@ -219,6 +255,10 @@
 					};
 					276F92BC2E202FCC004EE155 = {
 						CreatedOnToolsVersion = 16.4;
+						TestTargetID = 276F92992E202FCA004EE155;
+					};
+					27C699872E8C30E40090D12D = {
+						CreatedOnToolsVersion = 26.0.1;
 						TestTargetID = 276F92992E202FCA004EE155;
 					};
 				};
@@ -245,6 +285,7 @@
 				276F92992E202FCA004EE155 /* FoodForEyesApp */,
 				276F92B22E202FCC004EE155 /* FoodForEyesAppTests */,
 				276F92BC2E202FCC004EE155 /* FoodForEyesAppUITests */,
+				27C699872E8C30E40090D12D /* FoodForEyesAppTestss */,
 			);
 		};
 /* End PBXProject section */
@@ -265,6 +306,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		276F92BB2E202FCC004EE155 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		27C699862E8C30E40090D12D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -295,6 +343,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		27C699842E8C30E40090D12D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -307,6 +362,11 @@
 			isa = PBXTargetDependency;
 			target = 276F92992E202FCA004EE155 /* FoodForEyesApp */;
 			targetProxy = 276F92BE2E202FCC004EE155 /* PBXContainerItemProxy */;
+		};
+		27C6998D2E8C30E40090D12D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 276F92992E202FCA004EE155 /* FoodForEyesApp */;
+			targetProxy = 27C6998C2E8C30E40090D12D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -573,6 +633,48 @@
 			};
 			name = Release;
 		};
+		27C6998F2E8C30E40090D12D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MariahRevina.FoodForEyesAppTestss;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FoodForEyesApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FoodForEyesApp";
+			};
+			name = Debug;
+		};
+		27C699902E8C30E40090D12D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.MariahRevina.FoodForEyesAppTestss;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FoodForEyesApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FoodForEyesApp";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -608,6 +710,15 @@
 			buildConfigurations = (
 				276F92CF2E202FCC004EE155 /* Debug */,
 				276F92D02E202FCC004EE155 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		27C6998E2E8C30E40090D12D /* Build configuration list for PBXNativeTarget "FoodForEyesAppTestss" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27C6998F2E8C30E40090D12D /* Debug */,
+				27C699902E8C30E40090D12D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

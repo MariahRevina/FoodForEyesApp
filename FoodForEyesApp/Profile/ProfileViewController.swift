@@ -27,6 +27,7 @@ final class ProfileViewController: UIViewController {
         setupLoginNameLabel()
         setupDescriptionLabel()
         setupConstraints()
+        setupAccessibilityIdentifiers()
         if let profile = profileService.profile {
             updateProfileDetails(profile: profile)
         }
@@ -104,6 +105,7 @@ final class ProfileViewController: UIViewController {
         
         logoutButton.setImage(UIImage(named:"Exit"), for: .normal)
         logoutButton.addTarget(self, action: #selector(didTapLogoutButton), for: .touchUpInside)
+        logoutButton.accessibilityIdentifier = "logoutButton"
         addSubview(logoutButton, to: view)
         
     }
@@ -169,6 +171,12 @@ final class ProfileViewController: UIViewController {
             descriptionLabel.topAnchor.constraint(equalTo: loginNameLabel.bottomAnchor, constant: 8),
             descriptionLabel.leadingAnchor.constraint(equalTo: userAvatar.leadingAnchor)
         ])
+    }
+    
+    private func setupAccessibilityIdentifiers() {
+        userNameLabel.accessibilityIdentifier = "userNameLabel"
+        loginNameLabel.accessibilityIdentifier = "loginNameLabel"
+        descriptionLabel.accessibilityIdentifier = "descriptionLabel"
     }
     
 }

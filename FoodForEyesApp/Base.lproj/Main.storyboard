@@ -138,6 +138,7 @@
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8iM-QW-LlW">
                                 <rect key="frame" x="16" y="612" width="361" height="48"/>
+                                <accessibility key="accessibilityConfiguration" identifier="Authenticate"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="48" id="ROs-ht-IdT"/>
                                 </constraints>
@@ -180,7 +181,7 @@
         <!--Web View View Controller-->
         <scene sceneID="HJn-AC-paX">
             <objects>
-                <viewController id="EDI-i3-Hyq" customClass="WebViewViewController" customModule="FoodForEyesApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebViewViewController" id="EDI-i3-Hyq" customClass="WebViewViewController" customModule="FoodForEyesApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nKR-D0-EYj">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
