@@ -56,7 +56,6 @@ final class ImagesListViewControllerTests: XCTestCase {
 final class ImagesListViewControllerSpy: UIViewController, ImagesListViewControllerProtocol {
     var presenter: ImagesListPresenterProtocol!
     
-    // Флаги вызовов методов
     var reloadTableViewCalled = false
     var reloadRowCalled = false
     var reloadRowIndexPath: IndexPath?

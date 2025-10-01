@@ -18,7 +18,7 @@ class Image_FeedUITests: XCTestCase {
         XCTAssertTrue(loginTextField.waitForExistence(timeout: 10))
         
         loginTextField.tap()
-        loginTextField.typeText("mariahrevina@gmail.com")
+        loginTextField.typeText("")
         
         webView.tap()
         
@@ -27,7 +27,7 @@ class Image_FeedUITests: XCTestCase {
         
         passwordTextField.tap()
         
-        UIPasteboard.general.string = "Edihil42!"
+        UIPasteboard.general.string = ""
         passwordTextField.press(forDuration: 1.1)
         
         let pasteButton = app.menuItems["Paste"]

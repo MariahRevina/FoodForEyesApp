@@ -1,10 +1,3 @@
-//
-//  FoodForEyesAppUITestsLaunchTests.swift
-//  FoodForEyesAppUITests
-//
-//  Created by Мария уже Ревина on 10.07.2025.
-//
-
 import XCTest
 
 final class FoodForEyesAppUITestsLaunchTests: XCTestCase {
