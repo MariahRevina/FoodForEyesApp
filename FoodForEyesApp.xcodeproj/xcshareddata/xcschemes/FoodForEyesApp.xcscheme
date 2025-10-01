@@ -35,7 +35,7 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "276F92B22E202FCC004EE155"
+               BlueprintIdentifier = "27C699872E8C30E40090D12D"
                BuildableName = "FoodForEyesAppTests.xctest"
                BlueprintName = "FoodForEyesAppTests"
                ReferencedContainer = "container:FoodForEyesApp.xcodeproj">
@@ -58,8 +58,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "27C699872E8C30E40090D12D"
-               BuildableName = "FoodForEyesAppTestss.xctest"
-               BlueprintName = "FoodForEyesAppTestss"
+               BuildableName = "FoodForEyesAppTests.xctest"
+               BlueprintName = "FoodForEyesAppTests"
                ReferencedContainer = "container:FoodForEyesApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
