@@ -1,5 +1,13 @@
 import Foundation
 
+import Foundation
+
+protocol ProfileImageServiceProtocol {
+    var avatarURL: String? { get }
+}
+
+extension ProfileImageService: ProfileImageServiceProtocol {}
+
 struct UserResult: Codable {
     let profileImage: ProfileImage
 }
